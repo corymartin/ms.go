@@ -8,12 +8,12 @@ func Parse(str string) (float64, error)
 ------------------------------------------------
 
 ```go
-ms.Parse('1d')      // 86400000
-ms.Parse('10h')     // 36000000
-ms.Parse('2h')      // 7200000
-ms.Parse('1m')      // 60000
-ms.Parse('5s')      // 5000
-ms.Parse('100')     // 100
+ms.Parse("1d")      // 86400000
+ms.Parse("10h")     // 36000000
+ms.Parse("2h")      // 7200000
+ms.Parse("1m")      // 60000
+ms.Parse("5s")      // 5000
+ms.Parse("100")     // 100
 ```
 
 func Short(ms float64) string
