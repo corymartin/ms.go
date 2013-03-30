@@ -16,9 +16,10 @@ var (
 	y float64 = d * 365.25
 )
 
+var parseRgx, _ = regexp.Compile(`(?i)^((?:\d+)?\.?\d+) *(ms|seconds?|s|minutes?|m|hours?|h|days?|d|years?|y)?$`)
+
 func Parse(str string) (float64, error) {
-	r, _ := regexp.Compile(`(?i)^((?:\d+)?\.?\d+) *(ms|seconds?|s|minutes?|m|hours?|h|days?|d|years?|y)?$`)
-	match := r.FindStringSubmatch(str)
+	match := parseRgx.FindStringSubmatch(str)
 	if match == nil {
 		return 0, fmt.Errorf("Invalid string parsed: %s", str)
 	}
@@ -41,85 +42,85 @@ func Parse(str string) (float64, error) {
 	case "year":
 		fallthrough
 	case "y":
-		return float64(n * y), nil
+		return n * y, nil
 	case "days":
 		fallthrough
 	case "day":
 		fallthrough
 	case "d":
-		return float64(n * d), nil
+		return n * d, nil
 	case "hours":
 		fallthrough
 	case "hour":
 		fallthrough
 	case "h":
-		return float64(n * h), nil
+		return n * h, nil
 	case "minutes":
 		fallthrough
 	case "minute":
 		fallthrough
 	case "m":
-		return float64(n * m), nil
+		return n * m, nil
 	case "seconds":
 		fallthrough
 	case "second":
 		fallthrough
 	case "s":
-		return float64(n * s), nil
+		return n * s, nil
 	case "ms":
-		return float64(n), nil
+		return n, nil
 	}
 	return 0, nil
 }
 
 func Short(ms float64) string {
 	if ms >= d {
-		return fmt.Sprintf("%dd", round(ms/d))
+		return fmt.Sprintf("%gd", round(ms/d))
 	}
 	if ms >= h {
-		return fmt.Sprintf("%dh", round(ms/h))
+		return fmt.Sprintf("%gh", round(ms/h))
 	}
 	if ms >= m {
-		return fmt.Sprintf("%dm", round(ms/m))
+		return fmt.Sprintf("%gm", round(ms/m))
 	}
 	if ms >= s {
-		return fmt.Sprintf("%ds", round(ms/s))
+		return fmt.Sprintf("%gs", round(ms/s))
 	}
 	return fmt.Sprintf("%gms", ms)
 }
 
 func Long(ms float64) string {
 	if float64(ms) == d {
-		return fmt.Sprintf("%d day", round(ms/d))
+		return fmt.Sprintf("%g day", round(ms/d))
 	}
 	if float64(ms) > d {
-		return fmt.Sprintf("%d days", round(ms/d))
+		return fmt.Sprintf("%g days", round(ms/d))
 	}
 	if float64(ms) == h {
-		return fmt.Sprintf("%d hour", round(ms/h))
+		return fmt.Sprintf("%g hour", round(ms/h))
 	}
 	if float64(ms) > h {
-		return fmt.Sprintf("%d hours", round(ms/h))
+		return fmt.Sprintf("%g hours", round(ms/h))
 	}
 	if float64(ms) == m {
-		return fmt.Sprintf("%d minute", round(ms/m))
+		return fmt.Sprintf("%g minute", round(ms/m))
 	}
 	if float64(ms) > m {
-		return fmt.Sprintf("%d minutes", round(ms/m))
+		return fmt.Sprintf("%g minutes", round(ms/m))
 	}
 	if float64(ms) == s {
-		return fmt.Sprintf("%d second", round(ms/s))
+		return fmt.Sprintf("%g second", round(ms/s))
 	}
 	if float64(ms) > s {
-		return fmt.Sprintf("%d seconds", round(ms/s))
+		return fmt.Sprintf("%g seconds", round(ms/s))
 	}
 	return fmt.Sprintf("%g ms", ms)
 }
 
-func round(n float64) int64 {
+func round(n float64) float64 {
 	dec := n - math.Floor(n)
 	if dec >= 0.5 {
-		return int64(math.Ceil(n))
+		return math.Ceil(n)
 	}
-	return int64(math.Floor(n))
+	return math.Floor(n)
 }
