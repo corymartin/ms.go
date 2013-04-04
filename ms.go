@@ -24,10 +24,7 @@ func Parse(str string) (float64, error) {
 		return 0, fmt.Errorf("Invalid string parsed: %s", str)
 	}
 
-	n, err := strconv.ParseFloat(match[1], 64)
-	if err != nil {
-		return 0, fmt.Errorf("Number not parsed: ", str)
-	}
+	n, _ := strconv.ParseFloat(match[1], 64)
 
 	var t string
 	if match[2] != "" {

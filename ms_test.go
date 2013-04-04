@@ -24,6 +24,13 @@ func TestParse(t *testing.T) {
 			t.Errorf("%s failed: Parse(%s) != %d; Actual: %f", test.name, test.str, test.ms, n)
 		}
 	}
+
+	// Invalid string format
+	if _, err := Parse("blerg"); err == nil {
+		t.Error("Invalid string allowed to parse")
+	} else if err.Error() != "Invalid string parsed: blerg" {
+		t.Error("Expected parse error did not occur")
+	}
 }
 
 func TestShort(t *testing.T) {
